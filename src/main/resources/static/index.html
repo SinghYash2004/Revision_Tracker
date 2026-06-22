@@ -1,0 +1,232 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>DSA Revision Tracker</title>
+    <link rel="stylesheet" href="/styles.css">
+</head>
+<body>
+<div id="auth-page" class="auth-container">
+    <div class="auth-form-wrapper">
+        <div class="auth-header">
+            <span class="auth-logo">📚</span>
+            <h1>DSA Revision Tracker</h1>
+            <p>Master Data Structures & Algorithms with Spaced Repetition</p>
+        </div>
+        
+        <form id="auth-form" class="auth-form">
+            <div id="form-title"><h2>Login to Your Account</h2></div>
+            <div id="form-message" class="form-message"></div>
+            
+            <div id="name-field" class="form-group" style="display:none;">
+                <label>Full Name</label>
+                <input id="auth-name" type="text" placeholder="Your name" autocomplete="name">
+            </div>
+            
+            <div class="form-group">
+                <label>Email</label>
+                <input id="auth-email" type="email" placeholder="you@example.com" autocomplete="email" required>
+            </div>
+            
+            <div class="form-group">
+                <label>Password</label>
+                <input id="auth-password" type="password" placeholder="••••••••" autocomplete="current-password" required>
+            </div>
+            
+            <button id="auth-submit" type="submit" class="auth-button">Login</button>
+            
+            <div class="auth-toggle">
+                <span id="toggle-text">Don't have an account?</span>
+                <button id="toggle-form" type="button" class="toggle-link">Sign up here</button>
+            </div>
+        </form>
+        
+        <div class="auth-footer">
+            <p>💡 Track your progress, maintain streaks, and ace your interviews</p>
+        </div>
+    </div>
+</div>
+
+<div id="app-container" style="display:none;">
+<aside class="sidebar">
+    <div class="brand">
+        <span class="brand-mark">DSA</span>
+        <div>
+            <strong>Revision Tracker</strong>
+            <small>Learning OS</small>
+        </div>
+    </div>
+    <nav>
+        <button class="nav active" data-page="dashboard">📊 Dashboard</button>
+        <button class="nav" data-page="topics">📖 Topics</button>
+        <button class="nav" data-page="problems">🔧 Problems</button>
+        <button class="nav" data-page="revisions">🔄 Today's Revisions</button>
+        <button class="nav" data-page="analytics">📈 Analytics</button>
+        <button class="nav" data-page="progress">🎯 Progress</button>
+        <button class="nav" data-page="settings">⚙️ Settings</button>
+    </nav>
+    <div class="sidebar-footer">
+        <div class="user-profile">
+            <div class="user-avatar" id="user-avatar">U</div>
+            <div class="user-info">
+                <div class="user-name" id="user-name">User</div>
+                <small id="user-email">user@example.com</small>
+            </div>
+        </div>
+        <button id="logout-btn" class="logout-button">🚪 Logout</button>
+    </div>
+</aside>
+
+<main>
+    <header class="topbar">
+        <div>
+            <p class="eyebrow">Personal interview preparation cockpit</p>
+            <h1 id="page-title">Dashboard</h1>
+        </div>
+        <div class="search-wrap">
+            <input id="global-search" type="search" placeholder="Search topics, problems, tags">
+            <button id="refresh">🔄 Refresh</button>
+        </div>
+    </header>
+
+    <section id="dashboard" class="page active">
+        <div class="metric-grid">
+            <article class="metric">
+                <span>🎯 Readiness</span>
+                <strong id="overall-readiness">0%</strong>
+                <small>overall score</small>
+            </article>
+            <article class="metric">
+                <span>🔥 Current Streak</span>
+                <strong id="current-streak">0</strong>
+                <small>days</small>
+            </article>
+            <article class="metric">
+                <span>📚 Topics Learned</span>
+                <strong id="topics-count">0</strong>
+                <small>saved in CSV</small>
+            </article>
+            <article class="metric">
+                <span>✅ Problems Solved</span>
+                <strong id="problems-count">0</strong>
+                <small>practice bank</small>
+            </article>
+            <article class="metric">
+                <span>⏱️ Revision Time</span>
+                <strong id="revision-time">0m</strong>
+                <small>estimated today</small>
+            </article>
+        </div>
+        <div class="content-grid">
+            <section>
+                <div class="section-title"><h2>Today's Revisions</h2><span id="today-badge"></span></div>
+                <div id="today-list" class="list"></div>
+            </section>
+            <section>
+                <div class="section-title"><h2>Overdue</h2><span id="overdue-badge"></span></div>
+                <div id="overdue-list" class="list"></div>
+            </section>
+        </div>
+        <section>
+            <div class="section-title"><h2>Interview Readiness</h2><span>category balance</span></div>
+            <div id="readiness-bars" class="bars"></div>
+        </section>
+    </section>
+
+    <section id="topics" class="page">
+        <div class="split">
+            <form id="topic-form" class="panel">
+                <h2>Add Topic</h2>
+                <input name="name" required placeholder="Topic name">
+                <input name="category" required placeholder="Category">
+                <input name="dateLearned" type="date" required>
+                <input name="confidenceLevel" type="number" min="1" max="5" value="3" required>
+                <textarea name="notes" placeholder="Notes"></textarea>
+                <button type="submit">Add Topic</button>
+            </form>
+            <div class="panel">
+                <h2>Topics</h2>
+                <div class="filters">
+                    <input id="topic-query" placeholder="Search">
+                    <input id="topic-category" placeholder="Category">
+                    <input id="topic-date" type="date">
+                </div>
+                <div id="topics-table" class="table"></div>
+            </div>
+        </div>
+    </section>
+
+    <section id="problems" class="page">
+        <div class="split">
+            <form id="problem-form" class="panel">
+                <h2>Add Problem</h2>
+                <input name="platform" required placeholder="Platform">
+                <input name="problemNumber" placeholder="Problem number">
+                <input name="name" required placeholder="Problem name">
+                <select name="difficulty"><option>Easy</option><option>Medium</option><option>Hard</option></select>
+                <input name="topicTags" required placeholder="Tags separated by ;">
+                <input name="solvedDate" type="date" required>
+                <input name="timeTaken" placeholder="Time taken">
+                <label><input name="usedHint" type="checkbox"> Used hint</label>
+                <label><input name="solvedIndependently" type="checkbox" checked> Solved independently</label>
+                <textarea name="personalNotes" placeholder="Personal notes"></textarea>
+                <button type="submit">Add Problem</button>
+            </form>
+            <div class="panel">
+                <h2>Problems</h2>
+                <div class="filters">
+                    <input id="problem-query" placeholder="Search">
+                    <input id="problem-tag" placeholder="Tag">
+                    <input id="problem-platform" placeholder="Platform">
+                    <select id="problem-difficulty"><option value="">Any difficulty</option><option>Easy</option><option>Medium</option><option>Hard</option></select>
+                    <input id="problem-date" type="date">
+                </div>
+                <div id="problems-table" class="table"></div>
+            </div>
+        </div>
+    </section>
+
+    <section id="revisions" class="page">
+        <div class="section-title"><h2>Re-Solve Mode</h2><span>notes stay hidden until after recall</span></div>
+        <div id="revision-board" class="revision-board"></div>
+    </section>
+
+    <section id="analytics" class="page">
+        <div class="content-grid">
+            <section><h2>Problems per Month</h2><canvas id="problems-chart" height="180"></canvas></section>
+            <section><h2>Topics per Month</h2><canvas id="topics-chart" height="180"></canvas></section>
+            <section><h2>Tag Distribution</h2><div id="tag-bars" class="bars"></div></section>
+            <section><h2>Weak Areas</h2><div id="weak-list" class="list"></div></section>
+        </div>
+    </section>
+
+    <section id="progress" class="page">
+        <div class="content-grid">
+            <section><h2>Activity Heatmap</h2><div id="heatmap" class="heatmap"></div></section>
+            <section><h2>Forgotten Topics Detector</h2><div id="forgotten-list" class="list"></div></section>
+        </div>
+        <section><h2>Smart Recommendations</h2><div id="recommendations" class="chips"></div></section>
+    </section>
+
+    <section id="settings" class="page">
+        <div class="panel narrow">
+            <h2>Export Data</h2>
+            <p>All data is stored as CSV files in the local <code>data</code> folder after the app starts.</p>
+            <div class="export-grid">
+                <a href="/api/export/json">Export JSON</a>
+                <a href="/api/export/csv/topics.csv">topics.csv</a>
+                <a href="/api/export/csv/problems.csv">problems.csv</a>
+                <a href="/api/export/csv/revisions.csv">revisions.csv</a>
+                <a href="/api/export/csv/revision_history.csv">revision_history.csv</a>
+                <a href="/api/export/csv/streaks.csv">streaks.csv</a>
+            </div>
+        </div>
+    </section>
+</main>
+</div>
+
+<div id="toast" class="toast"></div>
+<script src="/app.js"></script>
+</body>
+</html>
