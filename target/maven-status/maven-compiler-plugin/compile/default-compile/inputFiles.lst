@@ -21,9 +21,6 @@ C:\PROJECTS\Revision_Tracker\src\main\java\com\revisiontracker\service\AuthServi
 C:\PROJECTS\Revision_Tracker\src\main\java\com\revisiontracker\service\RevisionService.java
 C:\PROJECTS\Revision_Tracker\src\main\java\com\revisiontracker\service\StreakService.java
 C:\PROJECTS\Revision_Tracker\src\main\java\com\revisiontracker\service\TrackerService.java
-C:\PROJECTS\Revision_Tracker\src\main\java\com\revisiontracker\storage\CsvStorageException.java
-C:\PROJECTS\Revision_Tracker\src\main\java\com\revisiontracker\storage\CsvTable.java
-C:\PROJECTS\Revision_Tracker\src\main\java\com\revisiontracker\storage\DataPaths.java
 C:\PROJECTS\Revision_Tracker\src\main\java\com\revisiontracker\storage\ProblemRepository.java
 C:\PROJECTS\Revision_Tracker\src\main\java\com\revisiontracker\storage\RevisionHistoryRepository.java
 C:\PROJECTS\Revision_Tracker\src\main\java\com\revisiontracker\storage\RevisionRepository.java

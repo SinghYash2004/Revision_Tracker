@@ -1,10 +1,15 @@
 package com.revisiontracker.model;
 
+import jakarta.persistence.*;
 import java.time.LocalDateTime;
 
+@Entity
+@Table(name = "user_accounts")
 public class UserAccount {
+    @Id
     private String id;
     private String name;
+    @Column(unique = true, nullable = false)
     private String email;
     private String passwordHash;
     private LocalDateTime createdAt;

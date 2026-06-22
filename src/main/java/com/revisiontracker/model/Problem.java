@@ -1,8 +1,12 @@
 package com.revisiontracker.model;
 
+import jakarta.persistence.*;
 import java.time.LocalDate;
 
+@Entity
+@Table(name = "problems")
 public class Problem {
+    @Id
     private String id;
     private String platform;
     private String problemNumber;
@@ -13,6 +17,7 @@ public class Problem {
     private String timeTaken;
     private boolean usedHint;
     private boolean solvedIndependently;
+    @Column(columnDefinition = "TEXT")
     private String personalNotes;
     private LocalDate lastRevised;
 

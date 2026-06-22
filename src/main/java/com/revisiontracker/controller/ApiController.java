@@ -10,7 +10,6 @@ import com.revisiontracker.service.AnalyticsService;
 import com.revisiontracker.service.AuthService;
 import com.revisiontracker.service.RevisionService;
 import com.revisiontracker.service.TrackerService;
-import com.revisiontracker.storage.DataPaths;
 import org.springframework.core.io.ByteArrayResource;
 import org.springframework.format.annotation.DateTimeFormat;
 import org.springframework.http.HttpHeaders;
@@ -19,7 +18,6 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 import java.io.IOException;
-import java.nio.file.Files;
 import java.time.LocalDate;
 import java.util.LinkedHashMap;
 import java.util.List;
@@ -32,16 +30,14 @@ public class ApiController {
     private final RevisionService revisions;
     private final AnalyticsService analytics;
     private final AuthService authService;
-    private final DataPaths dataPaths;
     private final ObjectMapper objectMapper;
 
     public ApiController(TrackerService tracker, RevisionService revisions, AnalyticsService analytics,
-                         AuthService authService, DataPaths dataPaths, ObjectMapper objectMapper) {
+                         AuthService authService, ObjectMapper objectMapper) {
         this.tracker = tracker;
         this.revisions = revisions;
         this.analytics = analytics;
         this.authService = authService;
-        this.dataPaths = dataPaths;
         this.objectMapper = objectMapper;
     }
 
@@ -127,16 +123,6 @@ public class ApiController {
         payload.put("revisionHistory", revisions.history());
         byte[] bytes = objectMapper.writerWithDefaultPrettyPrinter().writeValueAsBytes(payload);
         return download("dsa-revision-tracker-export.json", MediaType.APPLICATION_JSON, bytes);
-    }
-
-    @GetMapping("/export/csv/{file}")
-    public ResponseEntity<ByteArrayResource> exportCsv(@PathVariable String file) throws IOException {
-        List<String> allowed = List.of("topics.csv", "problems.csv", "revisions.csv", "revision_history.csv", "streaks.csv");
-        if (!allowed.contains(file)) {
-            return ResponseEntity.badRequest().build();
-        }
-        byte[] bytes = Files.readAllBytes(dataPaths.dataDir().resolve(file));
-        return download(file, MediaType.parseMediaType("text/csv"), bytes);
     }
 
     private static boolean contains(String value, String query) {

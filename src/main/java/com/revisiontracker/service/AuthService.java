@@ -25,7 +25,7 @@ public class AuthService {
 
     public AuthResponse register(AuthRequest request) {
         validate(request);
-        users.findByEmail(request.getEmail()).ifPresent(existing -> {
+        users.findByEmailIgnoreCase(request.getEmail()).ifPresent(existing -> {
             throw new ResponseStatusException(HttpStatus.CONFLICT, "An account already exists for this email.");
         });
         UserAccount user = new UserAccount(
@@ -43,7 +43,7 @@ public class AuthService {
         if (blank(request.getEmail()) || blank(request.getPassword())) {
             throw new ResponseStatusException(HttpStatus.BAD_REQUEST, "Email and password are required.");
         }
-        UserAccount user = users.findByEmail(request.getEmail())
+        UserAccount user = users.findByEmailIgnoreCase(request.getEmail())
                 .orElseThrow(() -> new ResponseStatusException(HttpStatus.UNAUTHORIZED, "Invalid email or password."));
         if (!user.getPasswordHash().equals(hash(request.getPassword()))) {
             throw new ResponseStatusException(HttpStatus.UNAUTHORIZED, "Invalid email or password.");

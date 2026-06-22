@@ -1,14 +1,20 @@
 package com.revisiontracker.model;
 
+import jakarta.persistence.*;
 import java.time.LocalDate;
 
+@Entity
+@Table(name = "revision_history")
 public class RevisionHistory {
+    @Id
     private String id;
+    @Enumerated(EnumType.STRING)
     private TrackableType itemType;
     private String itemId;
     private LocalDate revisedDate;
     private int rating;
     private String recallLevel;
+    @Column(columnDefinition = "TEXT")
     private String notes;
 
     public RevisionHistory() {

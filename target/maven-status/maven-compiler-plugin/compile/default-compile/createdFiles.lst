@@ -4,7 +4,6 @@ com\revisiontracker\model\Problem.class
 com\revisiontracker\dto\DashboardDto.class
 com\revisiontracker\service\AnalyticsService.class
 com\revisiontracker\service\TrackerService.class
-com\revisiontracker\storage\CsvStorageException.class
 com\revisiontracker\dto\RevisionItem.class
 com\revisiontracker\model\UserAccount.class
 com\revisiontracker\auth\AuthInterceptor.class
@@ -21,12 +20,10 @@ com\revisiontracker\model\RevisionStatus.class
 com\revisiontracker\storage\ProblemRepository.class
 com\revisiontracker\service\AuthService.class
 com\revisiontracker\controller\ApiController.class
-com\revisiontracker\storage\DataPaths.class
 com\revisiontracker\storage\RevisionRepository.class
 com\revisiontracker\RevisionTrackerApplication.class
 com\revisiontracker\model\TrackableType.class
 com\revisiontracker\storage\RevisionHistoryRepository.class
-com\revisiontracker\storage\CsvTable.class
 com\revisiontracker\model\StreakStats.class
 com\revisiontracker\model\Topic.class
 com\revisiontracker\service\RevisionService.class

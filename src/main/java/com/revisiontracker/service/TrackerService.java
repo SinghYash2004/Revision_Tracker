@@ -6,6 +6,7 @@ import com.revisiontracker.model.TrackableType;
 import com.revisiontracker.storage.ProblemRepository;
 import com.revisiontracker.storage.TopicRepository;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 import java.time.LocalDate;
 import java.util.List;
@@ -26,9 +27,10 @@ public class TrackerService {
     }
 
     public List<Topic> topics() {
-        return topics.findAll();
+        return topics.findAllByOrderByDateLearnedDesc();
     }
 
+    @Transactional
     public Topic addTopic(Topic topic) {
         topic.setId(UUID.randomUUID().toString());
         if (topic.getDateLearned() == null) {
@@ -42,9 +44,10 @@ public class TrackerService {
     }
 
     public List<Problem> problems() {
-        return problems.findAll();
+        return problems.findAllByOrderBySolvedDateDesc();
     }
 
+    @Transactional
     public Problem addProblem(Problem problem) {
         problem.setId(UUID.randomUUID().toString());
         if (problem.getSolvedDate() == null) {

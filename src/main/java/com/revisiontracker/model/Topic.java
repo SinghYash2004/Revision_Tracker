@@ -1,13 +1,18 @@
 package com.revisiontracker.model;
 
+import jakarta.persistence.*;
 import java.time.LocalDate;
 
+@Entity
+@Table(name = "topics")
 public class Topic {
+    @Id
     private String id;
     private String name;
     private String category;
     private LocalDate dateLearned;
     private int confidenceLevel;
+    @Column(columnDefinition = "TEXT")
     private String notes;
     private LocalDate lastRevised;
 

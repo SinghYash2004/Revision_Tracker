@@ -1,12 +1,18 @@
 package com.revisiontracker.model;
 
+import jakarta.persistence.*;
 import java.time.LocalDate;
 
+@Entity
+@Table(name = "revisions")
 public class Revision {
+    @Id
     private String id;
+    @Enumerated(EnumType.STRING)
     private TrackableType itemType;
     private String itemId;
     private LocalDate dueDate;
+    @Enumerated(EnumType.STRING)
     private RevisionStatus status;
     private int intervalDays;
 

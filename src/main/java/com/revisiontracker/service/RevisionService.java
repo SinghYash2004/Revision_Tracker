@@ -5,6 +5,7 @@ import com.revisiontracker.dto.RevisionItem;
 import com.revisiontracker.model.*;
 import com.revisiontracker.storage.*;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 import java.time.LocalDate;
 import java.time.temporal.ChronoUnit;
@@ -33,17 +34,18 @@ public class RevisionService {
         this.streakService = streakService;
     }
 
+    @Transactional
     public void createInitialSchedule(TrackableType type, String itemId, LocalDate baseDate) {
         List<Revision> additions = new ArrayList<>();
         for (int interval : INITIAL_INTERVALS) {
             additions.add(new Revision(id(), type, itemId, baseDate.plusDays(interval), RevisionStatus.PENDING, interval));
         }
-        revisions.addAll(additions);
+        revisions.saveAll(additions); // replaces old addAll()
     }
 
     public List<RevisionItem> today() {
         LocalDate today = LocalDate.now();
-        return revisions.findAll().stream()
+        return revisions.findAllByOrderByDueDateAsc().stream()
                 .filter(r -> r.getStatus() == RevisionStatus.PENDING && r.getDueDate().equals(today))
                 .map(this::toItem)
                 .toList();
@@ -51,19 +53,20 @@ public class RevisionService {
 
     public List<RevisionItem> overdue() {
         LocalDate today = LocalDate.now();
-        return revisions.findAll().stream()
+        return revisions.findAllByOrderByDueDateAsc().stream()
                 .filter(r -> r.getStatus() == RevisionStatus.PENDING && r.getDueDate().isBefore(today))
                 .map(this::toItem)
                 .toList();
     }
 
     public List<RevisionItem> allPending() {
-        return revisions.findAll().stream()
+        return revisions.findAllByOrderByDueDateAsc().stream()
                 .filter(r -> r.getStatus() == RevisionStatus.PENDING)
                 .map(this::toItem)
                 .toList();
     }
 
+    @Transactional
     public Revision complete(String revisionId, RevisionCompleteRequest request) {
         Revision revision = revisions.findById(revisionId).orElseThrow();
         revision.setStatus(RevisionStatus.COMPLETED);
@@ -86,16 +89,17 @@ public class RevisionService {
             });
         }
 
-        revisions.deletePendingFor(revision.getItemType(), revision.getItemId());
+        // Delete all remaining PENDING revisions for this item, then schedule the next one
+        revisions.deleteByItemTypeAndItemIdAndStatus(revision.getItemType(), revision.getItemId(), RevisionStatus.PENDING);
         int nextInterval = RATING_INTERVALS.get(rating);
-        revisions.save(new Revision(id(), revision.getItemType(), revision.getItemId(), LocalDate.now().plusDays(nextInterval),
-                RevisionStatus.PENDING, nextInterval));
+        revisions.save(new Revision(id(), revision.getItemType(), revision.getItemId(),
+                LocalDate.now().plusDays(nextInterval), RevisionStatus.PENDING, nextInterval));
         streakService.recordRevision();
         return revision;
     }
 
     public List<RevisionHistory> history() {
-        return history.findAll();
+        return history.findAllByOrderByRevisedDateDesc();
     }
 
     private RevisionItem toItem(Revision revision) {
